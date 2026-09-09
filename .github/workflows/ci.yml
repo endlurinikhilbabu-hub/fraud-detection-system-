@@ -25,30 +25,7 @@ jobs:
           python -m pip install -r requirements-prod.txt
           python -m pip install pytest httpx
 
-      - name: Verify project structure
-        run: |
-          echo "Working directory:"
-          pwd
-
-          echo "GitHub workspace:"
-          echo "$GITHUB_WORKSPACE"
-
-          echo "Project files:"
-          find . -maxdepth 2 -type f | sort
-
-      - name: Verify Python imports
-        env:
-          PYTHONPATH: ${{ github.workspace }}
-        run: |
-          python -c "import sys; print('Python path:'); print('\n'.join(sys.path))"
-          python -c "import api; print('api import: OK')"
-          python -c "import src; print('src import: OK')"
-          python -c "from api.main import app; print('FastAPI import: OK')"
-          python -c "from src.data.load import load_dataset; print('Data module import: OK')"
-          python -c "from src.features.engineering import add_amount_features; print('Feature module import: OK')"
-
       - name: Run tests
         env:
           PYTHONPATH: ${{ github.workspace }}
-        run: |
-          python -m pytest -v -m "not integration" --tb=short
+        run: python -m pytest -v -m "not integration"
