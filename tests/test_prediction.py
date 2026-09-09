@@ -1,3 +1,5 @@
+import pytest
+
 from fastapi.testclient import TestClient
 
 from api.main import app
@@ -148,6 +150,7 @@ def load_test_data():
     return X_test, y_test
 
 
+@pytest.mark.integration
 def test_real_legitimate_transaction():
     X_test, y_test = load_test_data()
 
@@ -176,6 +179,7 @@ def test_real_legitimate_transaction():
     assert result["prediction"] == expected_prediction
 
 
+@pytest.mark.integration
 def test_real_fraud_transaction():
     X_test, y_test = load_test_data()
 
@@ -204,6 +208,7 @@ def test_real_fraud_transaction():
     assert result["prediction"] == expected_prediction
 
 
+@pytest.mark.integration
 def test_api_predictor_consistency():
     X_test, y_test = load_test_data()
 

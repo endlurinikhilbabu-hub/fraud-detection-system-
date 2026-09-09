@@ -35,7 +35,15 @@ app.add_middleware(
     allow_headers=["Content-Type"],
 )
 
-predictor = FraudPredictor()
+predictor = None
+
+def get_predictor():
+    global predictor
+
+    if predictor is None:
+        predictor = FraudPredictor()
+
+    return predictor
 
 # ---------------------------------------------------------
 # Request Schema
@@ -96,7 +104,7 @@ def health_check():
     return {
         "status": "healthy",
         "model": "xgboost",
-        "threshold": predictor.threshold,
+        "threshold": get_predictor().threshold,
     }
 
 # ---------------------------------------------------------
@@ -111,7 +119,7 @@ def predict(transaction: Transaction):
     try:
         features = list(transaction.model_dump().values())
 
-        result = predictor.predict(features)
+        result = get_predictor().predict(features)
 
         logger.info(
             "Prediction completed | probability=%.6f | prediction=%d",
