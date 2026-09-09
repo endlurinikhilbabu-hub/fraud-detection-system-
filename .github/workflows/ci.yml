@@ -28,4 +28,15 @@ jobs:
       - name: Run tests
         env:
           PYTHONPATH: .
-        run: pytest -v -m "not integration"
+        run: |
+          echo "=== Python version ==="
+          python --version
+
+          echo "=== Pytest version ==="
+          pytest --version
+
+          echo "=== Project files ==="
+          ls -la
+
+          echo "=== Running tests ==="
+          pytest -v -m "not integration" --tb=short
